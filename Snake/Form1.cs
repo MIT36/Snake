@@ -1,9 +1,3 @@
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.Reflection.Metadata;
-using System.Timers;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 using Snake;
 using Snake.Models;
@@ -83,7 +77,7 @@ namespace WinFormsSnake
         {
             var graphic = e.Graphics;
             using var pen = new Pen(Color.Black, 2);
-            using var brush = new SolidBrush(Color.Aqua);
+            using var brush = new SolidBrush(Color.Green);
             foreach (var item in game.Items)
             {
                 var rectangle = new Rectangle(item.X, item.Y, sizeItem, sizeItem);

@@ -37,7 +37,7 @@
             // 
             // pbArea
             // 
-            pbArea.BackColor = Color.DarkOliveGreen;
+            pbArea.BackColor = Color.Turquoise;
             pbArea.BorderStyle = BorderStyle.FixedSingle;
             pbArea.Location = new Point(12, 12);
             pbArea.MaximumSize = new Size(1200, 1000);

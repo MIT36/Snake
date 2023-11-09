@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Snake;
 
-namespace Snake
+public enum Direction
 {
-    public enum Direction
-    {
-        Right,
-        Left,
-        Up,
-        Down
-    }
+    Right,
+    Left,
+    Up,
+    Down
+}
 
-    public enum EventStatus
-    {
-        Success,
-        Moved,
-        GameOver,
-        PreyEaten
-    }
+public enum EventStatus
+{
+    Success,
+    Moved,
+    GameOver,
+    PreyEaten
 }

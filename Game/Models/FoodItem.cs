@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
-namespace Snake.Models
+namespace Snake.Models;
+
+public class FoodItem : Item
 {
-    public class FoodItem : Item
-    {
-        public Color Color { get; set; }
+    public Color Color { get; set; }
 
-        public FoodItem(int x, int y, Color color) : base(x, y)
-        {
-            this.Color = color;
-        }
+    public FoodItem(int x, int y, Color color) : base(x, y)
+    {
+        this.Color = color;
     }
 }
