@@ -19,7 +19,7 @@ namespace WinFormsSnake
         {
             InitializeComponent();
 
-            var settings = GetSettignsFromXmlFile("settings.xml");
+            var settings = GetSettignsFromXmlFile();
 
             pbArea.Width = settings.Width;
             Width = pbArea.Width + 205;
@@ -63,12 +63,6 @@ namespace WinFormsSnake
         {
             MessageBox.Show("Game over!", "Game over!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Reset();
-        }
-
-        private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
-        {
-            Debug.WriteLine(DateTimeOffset.Now);
-            //game.Move();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -131,11 +125,11 @@ namespace WinFormsSnake
             UpdateLabels();
         }
 
-        private Settings GetSettignsFromXmlFile(string xmlFile)
+        private Settings GetSettignsFromXmlFile()
         {
             var serializer = new XmlSerializer(typeof(Settings));
             using var fs = new FileStream("settings.xml", FileMode.Open, FileAccess.Read);
-            return serializer.Deserialize(fs) as Settings;
+            return (Settings)serializer.Deserialize(fs);
         }
 
         private void UpdateLabels()
