@@ -1,4 +1,4 @@
-﻿namespace Snake
+﻿namespace WinFormsSnake
 {
     partial class MainForm
     {
@@ -28,47 +28,84 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnExit = new System.Windows.Forms.Button();
-            this.panel = new System.Windows.Forms.Panel();
-            this.SuspendLayout();
+            pbArea = new PictureBox();
+            lblInfo = new Label();
+            lblCountLevel = new Label();
+            lblScore = new Label();
+            ((System.ComponentModel.ISupportInitialize)pbArea).BeginInit();
+            SuspendLayout();
             // 
-            // btnExit
+            // pbArea
             // 
-            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExit.Location = new System.Drawing.Point(694, 409);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(94, 29);
-            this.btnExit.TabIndex = 1;
-            this.btnExit.Text = "Exit";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            pbArea.BackColor = Color.DarkOliveGreen;
+            pbArea.BorderStyle = BorderStyle.FixedSingle;
+            pbArea.Location = new Point(12, 12);
+            pbArea.MaximumSize = new Size(1200, 1000);
+            pbArea.MinimumSize = new Size(300, 300);
+            pbArea.Name = "pbArea";
+            pbArea.Size = new Size(600, 400);
+            pbArea.TabIndex = 2;
+            pbArea.TabStop = false;
+            pbArea.Paint += panel_Paint;
             // 
-            // panel
+            // lblInfo
             // 
-            this.panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.panel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel.Location = new System.Drawing.Point(12, 12);
-            this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(776, 298);
-            this.panel.TabIndex = 2;
-            this.panel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_Paint);
+            lblInfo.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            lblInfo.AutoSize = true;
+            lblInfo.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            lblInfo.Location = new Point(618, 352);
+            lblInfo.Name = "lblInfo";
+            lblInfo.Size = new Size(168, 60);
+            lblInfo.TabIndex = 3;
+            lblInfo.Text = "Enter:           Start/Stop\r\nBackspace:  Reset\r\nEsc:              Exit";
+            // 
+            // lblCountLevel
+            // 
+            lblCountLevel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblCountLevel.AutoSize = true;
+            lblCountLevel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lblCountLevel.Location = new Point(660, 12);
+            lblCountLevel.Name = "lblCountLevel";
+            lblCountLevel.Size = new Size(84, 28);
+            lblCountLevel.TabIndex = 4;
+            lblCountLevel.Text = "Level: 1";
+            lblCountLevel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblScore
+            // 
+            lblScore.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblScore.AutoSize = true;
+            lblScore.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lblScore.Location = new Point(660, 54);
+            lblScore.Name = "lblScore";
+            lblScore.Size = new Size(87, 28);
+            lblScore.TabIndex = 5;
+            lblScore.Text = "Score: 0";
+            lblScore.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.panel);
-            this.Controls.Add(this.btnExit);
-            this.Name = "MainForm";
-            this.Text = "Snake";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
+            ClientSize = new Size(787, 428);
+            Controls.Add(lblScore);
+            Controls.Add(lblCountLevel);
+            Controls.Add(lblInfo);
+            Controls.Add(pbArea);
+            KeyPreview = true;
+            Name = "MainForm";
+            Text = "Snake";
+            KeyDown += MainForm_KeyDown;
+            ((System.ComponentModel.ISupportInitialize)pbArea).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-        private Button btnExit;
-        private Panel panel;
+        private PictureBox pbArea;
+        private Label lblInfo;
+        private Label lblCountLevel;
+        private Label lblScore;
     }
 }

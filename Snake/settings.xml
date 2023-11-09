@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+	<SizeItem>20</SizeItem>
+	<Width>640</Width>
+	<Height>480</Height>
+	<Levels>
+		<Level id="1">
+			<MaxScore>100</MaxScore>
+			<Speed>150</Speed>
+			<PointsSilver>10</PointsSilver>
+			<PointsRed>20</PointsRed>
+			<PointsBlue>30</PointsBlue>
+		</Level>
+		<Level id="2">
+			<MaxScore>200</MaxScore>
+			<Speed>100</Speed>
+			<PointsSilver>15</PointsSilver>
+			<PointsRed>20</PointsRed>
+			<PointsBlue>30</PointsBlue>
+		</Level>
+		<Level id="3">
+			<MaxScore>300</MaxScore>
+			<Speed>70</Speed>
+			<PointsSilver>30</PointsSilver>
+			<PointsRed>50</PointsRed>
+			<PointsBlue>70</PointsBlue>
+		</Level>
+		<Level id="4">
+			<MaxScore>500</MaxScore>
+			<Speed>50</Speed>
+			<PointsSilver>50</PointsSilver>
+			<PointsRed>75</PointsRed>
+			<PointsBlue>100</PointsBlue>
+		</Level>
+	</Levels>
+</Settings>

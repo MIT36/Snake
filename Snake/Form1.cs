@@ -1,99 +1,158 @@
+using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
+using System.Reflection.Metadata;
 using System.Timers;
 using System.Windows.Forms;
+using System.Xml.Serialization;
+using Snake;
+using Snake.Models;
 
-namespace Snake
+namespace WinFormsSnake
 {
     public partial class MainForm : Form
     {
-        private readonly System.Timers.Timer timer;
-
-        private int headX = 10, tailX = 10, headY = 50, tailY = 50;
-        private int size = 20;
-
-        private int direct = 0;
-
-        //private Graphics graphic;
+        private readonly Game game;
+        private readonly int sizeItem;
 
         public MainForm()
         {
             InitializeComponent();
-            //graphic = panel.CreateGraphics();
-            timer = new System.Timers.Timer(500);
-            timer.Elapsed += Timer_Elapsed;
-            timer.Start();
+
+            var settings = GetSettignsFromXmlFile("settings.xml");
+
+            pbArea.Width = settings.Width;
+            Width = pbArea.Width + 205;
+
+            pbArea.Height = settings.Height;
+            Height = pbArea.Height + 75;
+
+            sizeItem = settings.SizeItem;
+
+            game = new Game(settings);
+            game.Notification += Game_Notification;
+        }
+
+        private void Game_Notification(object? sender, EventStatus e)
+        {
+            switch (e)
+            {
+                case EventStatus.Success:
+                    game.Stop();
+                    UpdateLabels();
+                    MessageBox.Show("Success!", "Congratulations! You win!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Reset();
+                    break;
+                case EventStatus.Moved:
+                    UpdateLabels();
+                    pbArea.Invalidate();
+                    break;
+                case EventStatus.PreyEaten:
+                    PreyEaten();
+                    break;
+                case EventStatus.GameOver:
+                    GameOver();
+                    break;
+                default: return;
+            }
+        }
+
+        private void PreyEaten() => UpdateLabels();
+
+        private void GameOver()
+        {
+            MessageBox.Show("Game over!", "Game over!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Reset();
         }
 
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine(DateTimeOffset.Now);
-            using var graphic = panel.CreateGraphics();
-            using var pen = new Pen(Color.Black, 2);
-            using var brush = new SolidBrush(Color.Aqua);
+            Debug.WriteLine(DateTimeOffset.Now);
+            //game.Move();
+        }
 
-            RenderTail(graphic, pen, brush);
-
-            RenderHead(graphic, pen, brush);
-
-            if (headX + size >= panel.Width)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            game.SetDirection(keyData switch
             {
-                timer.Stop();
-                MessageBox.Show("Game over!", "Game over!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+                Keys.Right => Direction.Right,
+                Keys.Left => Direction.Left,
+                Keys.Up => Direction.Up,
+                Keys.Down => Direction.Down,
+                _ => game.Direction
+            });
 
-        void RenderHead(Graphics graphics, Pen pen, SolidBrush brush)
-        {
-            pen.Color = Color.Black;
-            brush.Color = Color.Aqua;
-            var headSquare = new Rectangle(headX, headY, size, size);
-            graphics.DrawRectangle(pen, headSquare);
-            graphics.FillRectangle(brush, headSquare);
-        }
-
-        void RenderTail(Graphics graphics, Pen pen, SolidBrush brush)
-        {
-            var tailSquare = new Rectangle(tailX, tailY, size, size);
-            pen.Color = panel.BackColor;
-            brush.Color = panel.BackColor;
-            graphics.DrawRectangle(pen, tailSquare);
-            graphics.FillRectangle(brush, tailSquare);
-            tailX += size;
-        }
-
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            direct = e.KeyCode switch
-            {
-                Keys.Down => 1,
-                Keys.Up => 2,
-                Keys.Left => 3,
-                _ => direct
-            };
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void panel_Paint(object sender, PaintEventArgs e)
         {
-            using var graphic = panel.CreateGraphics();
+            var graphic = e.Graphics;
             using var pen = new Pen(Color.Black, 2);
             using var brush = new SolidBrush(Color.Aqua);
-            for (int i = 0; i < 5; i++)
+            foreach (var item in game.Items)
             {
-                headX += size;
-                var square = new Rectangle(headX, headY, size, size);
-                graphic.DrawRectangle(pen, square);
-                graphic.FillRectangle(brush, square);
+                var rectangle = new Rectangle(item.X, item.Y, sizeItem, sizeItem);
+                graphic.DrawRectangle(pen, rectangle);
+                graphic.FillRectangle(brush, rectangle);
+            }
+
+            var rectFood = new Rectangle(game.RandomFood.X, game.RandomFood.Y, sizeItem, sizeItem);
+            graphic.DrawRectangle(pen, rectFood);
+            brush.Color = game.RandomFood.Color;
+            graphic.FillRectangle(brush, rectFood);
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyData)
+            {
+                case Keys.Back:
+                    Reset();
+                    break;
+                case Keys.Escape:
+                    game.Stop();
+                    Close();
+                    break;
+                case Keys.Enter:
+                    if (!game.IsRunning())
+                        game.Start();
+                    else
+                        game.Stop();
+                    break;
             }
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
+        void Reset()
         {
-            Close();
+            game.Stop();
+            game.Reset();
+            pbArea.Invalidate();
+            UpdateLabels();
         }
 
-        private void Render()
+        private Settings GetSettignsFromXmlFile(string xmlFile)
         {
-            
+            var serializer = new XmlSerializer(typeof(Settings));
+            using var fs = new FileStream("settings.xml", FileMode.Open, FileAccess.Read);
+            return serializer.Deserialize(fs) as Settings;
+        }
+
+        private void UpdateLabels()
+        {
+            if (lblCountLevel.InvokeRequired)
+            {
+                lblCountLevel.Invoke(PreyEaten);
+                return;
+            }
+            lblCountLevel.Text = $"Level: {game.CurrentLevel.Id}";
+
+            if (lblScore.InvokeRequired)
+            {
+                lblScore.Invoke(PreyEaten);
+                return;
+            }
+            lblScore.Text = $"Score: {game.TotalScore}";
         }
     }
 }
