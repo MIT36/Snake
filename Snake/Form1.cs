@@ -77,7 +77,7 @@ namespace WinFormsSnake
         {
             var graphic = e.Graphics;
             using var pen = new Pen(Color.Black, 2);
-            using var brush = new SolidBrush(Color.Green);
+            using var brush = new SolidBrush(Color.GreenYellow);
             foreach (var item in game.Items)
             {
                 var rectangle = new Rectangle(item.X, item.Y, sizeItem, sizeItem);
