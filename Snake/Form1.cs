@@ -129,7 +129,7 @@ namespace WinFormsSnake
         {
             var serializer = new XmlSerializer(typeof(Settings));
             using var fs = new FileStream("settings.xml", FileMode.Open, FileAccess.Read);
-            return (Settings)serializer.Deserialize(fs);
+            return (Settings)serializer.Deserialize(fs)!;
         }
 
         private void UpdateLabels()
